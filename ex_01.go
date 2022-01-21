@@ -7,7 +7,6 @@ import (
 
 // func crawl data
 func crawlData(data int) {
-	//time.Sleep(time.Millisecond)
 	fmt.Println("Data crawled: ", data)
 }
 
