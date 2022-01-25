@@ -1,4 +1,4 @@
-Khoá chính (Primary Key): (h3)  
+## Khoá chính (Primary Key): ## 
     - Khóa chính (hay ràng buộc khóa chính) được sử dụng để định danh duy nhất mỗi record tại table của cơ sở dữ liệu.  
     - Ngoài ra, nó còn sử dụng để thiết lập quan hệ 1-n (hay ràng buộc tham chiếu) giữa hai table tại cơ sở dữ liệu.  
     - Dữ liệu (value) của field khóa chính nên có tính độc nhất. và không có các giá trị Null.  
