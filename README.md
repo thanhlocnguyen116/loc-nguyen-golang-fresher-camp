@@ -1,3 +1,5 @@
-- Do các service lớn sẽ có nhiều services nhỏ. Cho nên khi dùng khoá ngoại sẽ gây ra tiêu tốn tài nguyên vì nó yêu cầu tính nhất quán của khoá ngoại.  
-- Việc có khoá ngoại ảnh hưởng đến tốc độ thực hiện các hành động thêm, sửa, xoá dữ liệu đồng thời ảnh hưởng tới tốc độ của hệ thống  
-- Gây tốn kém khi phải làm sạch giữ liệu cũ khi tạo khoá ngoại
+Khoá chính (Primary Key): (h3)  
+    - Khóa chính (hay ràng buộc khóa chính) được sử dụng để định danh duy nhất mỗi record tại table của cơ sở dữ liệu.  
+    - Ngoài ra, nó còn sử dụng để thiết lập quan hệ 1-n (hay ràng buộc tham chiếu) giữa hai table tại cơ sở dữ liệu.  
+    - Dữ liệu (value) của field khóa chính nên có tính độc nhất. và không có các giá trị Null.  
+    - Mỗi table nên chỉ có một khóa chủ đạo, khóa chủ đạo có khả năng sản sinh ra từ nhiều field của table.
