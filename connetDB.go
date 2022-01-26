@@ -41,10 +41,54 @@ type User struct {
 	Address  string `json:"address" gorm:"column:address"`
 }
 
-func main() {
+type UserUpdate struct {
+	Name *string `json:"name" gorm:"column:name"`
+}
 
+func (User) TableName() string {
+	return "users"
+}
+
+func main() {
 	dsn := os.Getenv("DBconnectionString")
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 
 	fmt.Println(db, err)
+
+	//insert
+	newUser := User{
+		Name:     "A",
+		Password: "123456",
+		Email:    "nvA@gmail.com",
+		Phone:    123456789,
+		Address:  "Ha Noi",
+	}
+
+	if err := db.Create(&newUser); err != nil {
+		fmt.Println(err)
+	}
+
+	//search array
+	var users []User
+	db.Where("name = ?", "A").Find(&users)
+	fmt.Println(users)
+
+	//search one
+	var user User
+	if err := db.Where("user_id = 1").First(&user); err != nil {
+		log.Println(err)
+	}
+	fmt.Println(user)
+
+	//update
+	newName := "Nguyen Van A"
+	if err := db.Table(User{}.TableName()).Where("user_id = 2").Updates(&UserUpdate{
+		Name: &newName,
+	}); err != nil {
+		log.Println(err)
+	}
+
+	//delete
+	db.Table(User{}.TableName()).Where("user_id = 2").Delete(nil)
+
 }
