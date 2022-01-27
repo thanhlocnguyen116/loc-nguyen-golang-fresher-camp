@@ -1,4 +1,4 @@
-module github.com/thanhlocnguyen116/loc-nguyen-golang-fresher-camp/tree/GoEx7
+module locnguyen
 
 go 1.17
 
