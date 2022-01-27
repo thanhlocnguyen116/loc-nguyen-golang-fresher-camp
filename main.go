@@ -84,15 +84,15 @@ func runService(db *gorm.DB) error {
 
 	appCtx := component.NewAppContext(db)
 
-	restaurants := r.Group("/restaurants")
+	users := r.Group("/users")
 	{
-		restaurants.POST("", ginuser.CreateRestaurant(appCtx))
+		users.POST("", ginuser.CreateUser(appCtx))
 
-		restaurants.GET("/:id", ginuser.GetRestaurant(appCtx))
+		users.GET("/:id", ginuser.GetUser(appCtx))
 
-		restaurants.GET("", ginuser.ListRestaurant(appCtx))
+		users.GET("", ginuser.ListUser(appCtx))
 
-		restaurants.PATCH("/:id", func(c *gin.Context) {
+		users.PATCH("/:id", func(c *gin.Context) {
 			id, err := strconv.Atoi(c.Param("id"))
 
 			if err != nil {
@@ -113,7 +113,7 @@ func runService(db *gorm.DB) error {
 				return
 			}
 
-			if err := db.Where("id = ?", id).Updates(&data).Error; err != nil {
+			if err := db.Where("user_id = ?", id).Updates(&data).Error; err != nil {
 				c.JSON(401, map[string]interface{}{
 					"error": err.Error(),
 				})
@@ -124,7 +124,7 @@ func runService(db *gorm.DB) error {
 			c.JSON(http.StatusOK, gin.H{"ok": 1})
 		})
 
-		restaurants.DELETE("/:id", func(c *gin.Context) {
+		users.DELETE("/:id", func(c *gin.Context) {
 			id, err := strconv.Atoi(c.Param("id"))
 
 			if err != nil {
@@ -136,7 +136,7 @@ func runService(db *gorm.DB) error {
 			}
 
 			if err := db.Table(User{}.TableName()).
-				Where("id = ?", id).
+				Where("user_id = ?", id).
 				Delete(nil).Error; err != nil {
 				c.JSON(401, map[string]interface{}{
 					"error": err.Error(),
