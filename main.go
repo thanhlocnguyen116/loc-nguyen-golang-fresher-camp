@@ -76,7 +76,7 @@ func runService(db *gorm.DB) error {
 
 	r.GET("/ping", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
-			"message": "pong",
+			"message": "ponk",
 		})
 	})
 
@@ -88,44 +88,14 @@ func runService(db *gorm.DB) error {
 	{
 		users.POST("", ginuser.CreateUser(appCtx))
 
-		users.GET("/:id", ginuser.GetUser(appCtx))
+		users.GET("/:user_id", ginuser.GetUser(appCtx))
 
 		users.GET("", ginuser.ListUser(appCtx))
 
-		users.PATCH("/:id", func(c *gin.Context) {
-			id, err := strconv.Atoi(c.Param("id"))
+		users.PATCH("/:user_id", ginuser.UpdateUser(appCtx))
 
-			if err != nil {
-				c.JSON(401, map[string]interface{}{
-					"error": err.Error(),
-				})
-
-				return
-			}
-
-			var data UserUpdate
-
-			if err := c.ShouldBind(&data); err != nil {
-				c.JSON(401, map[string]interface{}{
-					"error": err.Error(),
-				})
-
-				return
-			}
-
-			if err := db.Where("user_id = ?", id).Updates(&data).Error; err != nil {
-				c.JSON(401, map[string]interface{}{
-					"error": err.Error(),
-				})
-
-				return
-			}
-
-			c.JSON(http.StatusOK, gin.H{"ok": 1})
-		})
-
-		users.DELETE("/:id", func(c *gin.Context) {
-			id, err := strconv.Atoi(c.Param("id"))
+		users.DELETE("/:user_id", func(c *gin.Context) {
+			user_id, err := strconv.Atoi(c.Param("user_id"))
 
 			if err != nil {
 				c.JSON(401, map[string]interface{}{
@@ -136,7 +106,7 @@ func runService(db *gorm.DB) error {
 			}
 
 			if err := db.Table(User{}.TableName()).
-				Where("user_id = ?", id).
+				Where("user_id = ?", user_id).
 				Delete(nil).Error; err != nil {
 				c.JSON(401, map[string]interface{}{
 					"error": err.Error(),

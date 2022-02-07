@@ -2,16 +2,18 @@ package usermodel
 
 import (
 	"errors"
+	"locnguyen/common"
 	"strings"
 )
 
 type User struct {
-	User_id  int    `json:"user_id,omitempty" gorm:"column:user_id"`
-	Name     string `json:"name" gorm:"column:name"`
-	Password string `json:"password" gorm:"column:password"`
-	Email    string `json:"email" gorm:"column:email"`
-	Phone    int    `json:"phone" gorm:"column:phone"`
-	Address  string `json:"address" gorm:"column:address"`
+	common.SQLModel `json:",inline"`
+	User_id         int    `json:"user_id,omitempty" gorm:"column:user_id"`
+	Name            string `json:"name" gorm:"column:name"`
+	Password        string `json:"password" gorm:"column:password"`
+	Email           string `json:"email" gorm:"column:email"`
+	Phone           int    `json:"phone" gorm:"column:phone"`
+	Address         string `json:"address" gorm:"column:address"`
 }
 
 func (User) TableName() string {
