@@ -2,6 +2,7 @@ package usersbiz
 
 import (
 	"context"
+	"locnguyen/common"
 	"locnguyen/modules/users/usermodel"
 )
 
@@ -23,6 +24,18 @@ func NewGetUserBiz(store GetUserStore) *getUserBiz {
 
 func (biz *getUserBiz) GetUser(ctx context.Context, id int) (*usermodel.User, error) {
 	data, err := biz.store.FindDataByCondition(ctx, map[string]interface{}{"id": id})
+
+	if err != nil {
+		if err != common.RecordNotFound {
+			return nil, common.ErrCannotGetEntity(usermodel.EntityName, err)
+		}
+
+		return nil, common.ErrCannotGetEntity(usermodel.EntityName, err)
+	}
+
+	if data.Status == 0 {
+		return nil, common.ErrEntityDeleted(usermodel.EntityName, nil)
+	}
 
 	return data, err
 }

@@ -2,11 +2,11 @@ package main
 
 import (
 	"locnguyen/component"
+	"locnguyen/middleware"
 	"locnguyen/modules/users/usertransport/ginuser"
 	"log"
 	"net/http"
 	"os"
-	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
@@ -72,7 +72,11 @@ func main() {
 }
 
 func runService(db *gorm.DB) error {
+
+	appCtx := component.NewAppContext(db)
 	r := gin.Default()
+
+	r.Use(middleware.Recover(appCtx))
 
 	r.GET("/ping", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
@@ -82,41 +86,13 @@ func runService(db *gorm.DB) error {
 
 	// CRUD
 
-	appCtx := component.NewAppContext(db)
-
 	users := r.Group("/users")
 	{
 		users.POST("", ginuser.CreateUser(appCtx))
-
 		users.GET("/:user_id", ginuser.GetUser(appCtx))
-
 		users.GET("", ginuser.ListUser(appCtx))
-
 		users.PATCH("/:user_id", ginuser.UpdateUser(appCtx))
-
-		users.DELETE("/:user_id", func(c *gin.Context) {
-			user_id, err := strconv.Atoi(c.Param("user_id"))
-
-			if err != nil {
-				c.JSON(401, map[string]interface{}{
-					"error": err.Error(),
-				})
-
-				return
-			}
-
-			if err := db.Table(User{}.TableName()).
-				Where("user_id = ?", user_id).
-				Delete(nil).Error; err != nil {
-				c.JSON(401, map[string]interface{}{
-					"error": err.Error(),
-				})
-
-				return
-			}
-
-			c.JSON(http.StatusOK, gin.H{"ok": 1})
-		})
+		users.DELETE("/:user_id", ginuser.DeleteUser(appCtx))
 	}
 
 	return r.Run()

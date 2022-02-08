@@ -6,14 +6,15 @@ import (
 	"locnguyen/modules/users/usermodel"
 )
 
-func (s *sqlStore) UpdateData(
+func (s *sqlStore) SoftDeleteData(
 	ctx context.Context,
 	user_id int,
-	data *usermodel.UserUpdate,
 ) error {
 	db := s.db
 
-	if err := db.Where("user_id = ?", user_id).Updates(data).Error; err != nil {
+	if err := db.Table(usermodel.User{}.TableName()).Where("user_id = ?", user_id).Updates(map[string]interface{}{
+		"status": 0,
+	}).Error; err != nil {
 		return common.ErrDB(err)
 	}
 

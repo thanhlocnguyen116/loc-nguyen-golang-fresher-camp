@@ -11,24 +11,29 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func GetUser(appCtx component.AppContext) gin.HandlerFunc {
+func DeleteUser(appCtx component.AppContext) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		user_id, err := strconv.Atoi(c.Param("user_id"))
 
 		if err != nil {
-			c.JSON(http.StatusBadRequest, common.ErrInvalidRequest(err))
+			c.JSON(401, map[string]interface{}{
+				"error": err.Error(),
+			})
+
 			return
 		}
 
 		store := userstorage.NewSQLStore(appCtx.GetMainDBConnection())
-		biz := usersbiz.NewGetUserBiz(store)
+		biz := usersbiz.NewDeleteUserBiz(store)
 
-		data, err := biz.GetUser(c.Request.Context(), user_id)
+		if err := biz.DeleteUser(c.Request.Context(), user_id); err != nil {
+			c.JSON(401, gin.H{
+				"error": err.Error(),
+			})
 
-		if err != nil {
-			panic(err)
+			return
 		}
 
-		c.JSON(http.StatusOK, common.SimpleSuccessResponse(data))
+		c.JSON(http.StatusOK, common.SimpleSuccessResponse(true))
 	}
 }
