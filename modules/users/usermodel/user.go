@@ -23,7 +23,8 @@ func (User) TableName() string {
 }
 
 type UserUpdate struct {
-	Name *string `json:"name" gorm:"column:name;"`
+	Name    *string `json:"name" gorm:"column:name;"`
+	Address *string `json:"address" gorm:"column:address"`
 }
 
 func (UserUpdate) TableName() string {
