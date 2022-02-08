@@ -4,4 +4,5 @@
 - Dễ quản lý, khôi phục dữ liệu
 - khả năng bảo mật
 # Không nên lưu ảnh binary vào DB bởi: 
-- 
+- Gây nặng DB
+- Mất thời gian truy xuất
