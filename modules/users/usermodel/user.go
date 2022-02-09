@@ -10,12 +10,12 @@ const EntityName = "User"
 
 type User struct {
 	common.SQLModel `json:",inline"`
-	User_id         int    `json:"user_id,omitempty" gorm:"column:user_id"`
-	Name            string `json:"name" gorm:"column:name"`
-	Password        string `json:"password" gorm:"column:password"`
+	Id              int    `json:"id,omitempty" gorm:"column:id"`
 	Email           string `json:"email" gorm:"column:email"`
-	Phone           int    `json:"phone" gorm:"column:phone"`
-	Address         string `json:"address" gorm:"column:address"`
+	Password        string `json:"password" gorm:"column:password"`
+	FirstName       string `json:"first_name" gorm:"column:first_name"`
+	LastName        string `json:"last_name" gorm:"column:last_name"`
+	Role            string `json:"role" gorm:"column:role"`
 }
 
 func (User) TableName() string {
@@ -23,8 +23,8 @@ func (User) TableName() string {
 }
 
 type UserUpdate struct {
-	Name    *string `json:"name" gorm:"column:name;"`
-	Address *string `json:"address" gorm:"column:address"`
+	FirstName *string `json:"first_name" gorm:"column:first_name"`
+	LastName  *string `json:"last_name" gorm:"column:last_name"`
 }
 
 func (UserUpdate) TableName() string {
@@ -32,12 +32,12 @@ func (UserUpdate) TableName() string {
 }
 
 type UserCreate struct {
-	User_id  int    `json:"user_id,omitempty" gorm:"column:user_id"`
-	Name     string `json:"name" gorm:"column:name"`
-	Password string `json:"password" gorm:"column:password"`
-	Email    string `json:"email" gorm:"column:email"`
-	Phone    int    `json:"phone" gorm:"column:phone"`
-	Address  string `json:"address" gorm:"column:address"`
+	Id        int    `json:"id,omitempty" gorm:"column:id"`
+	Email     string `json:"email" gorm:"column:email"`
+	Password  string `json:"password" gorm:"column:password"`
+	FirstName string `json:"first_name" gorm:"column:first_name"`
+	LastName  string `json:"last_name" gorm:"column:last_name"`
+	Role      string `json:"role" gorm:"column:role"`
 }
 
 func (UserCreate) TableName() string {
@@ -45,9 +45,9 @@ func (UserCreate) TableName() string {
 }
 
 func (res *UserCreate) Validate() error {
-	res.Name = strings.TrimSpace(res.Name)
+	res.Email = strings.TrimSpace(res.Email)
 
-	if len(res.Name) == 0 {
+	if len(res.Email) == 0 {
 		return errors.New("sao lại để trống?")
 	}
 

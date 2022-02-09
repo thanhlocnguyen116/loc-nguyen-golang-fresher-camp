@@ -13,7 +13,7 @@ import (
 
 func DeleteUser(appCtx component.AppContext) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		user_id, err := strconv.Atoi(c.Param("user_id"))
+		id, err := strconv.Atoi(c.Param("id"))
 
 		if err != nil {
 			c.JSON(401, map[string]interface{}{
@@ -26,7 +26,7 @@ func DeleteUser(appCtx component.AppContext) gin.HandlerFunc {
 		store := userstorage.NewSQLStore(appCtx.GetMainDBConnection())
 		biz := usersbiz.NewDeleteUserBiz(store)
 
-		if err := biz.DeleteUser(c.Request.Context(), user_id); err != nil {
+		if err := biz.DeleteUser(c.Request.Context(), id); err != nil {
 			c.JSON(401, gin.H{
 				"error": err.Error(),
 			})

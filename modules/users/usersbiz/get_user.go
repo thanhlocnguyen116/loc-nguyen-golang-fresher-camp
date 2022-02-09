@@ -22,8 +22,8 @@ func NewGetUserBiz(store GetUserStore) *getUserBiz {
 	return &getUserBiz{store: store}
 }
 
-func (biz *getUserBiz) GetUser(ctx context.Context, user_id int) (*usermodel.User, error) {
-	data, err := biz.store.FindDataByCondition(ctx, map[string]interface{}{"user_id": user_id})
+func (biz *getUserBiz) GetUser(ctx context.Context, id int) (*usermodel.User, error) {
+	data, err := biz.store.FindDataByCondition(ctx, map[string]interface{}{"id": id})
 
 	if err != nil {
 		if err != common.RecordNotFound {

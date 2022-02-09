@@ -14,7 +14,7 @@ import (
 
 func UpdateUser(appCtx component.AppContext) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		user_id, err := strconv.Atoi(c.Param("user_id"))
+		id, err := strconv.Atoi(c.Param("id"))
 
 		if err != nil {
 			c.JSON(401, map[string]interface{}{
@@ -37,7 +37,7 @@ func UpdateUser(appCtx component.AppContext) gin.HandlerFunc {
 		store := userstorage.NewSQLStore(appCtx.GetMainDBConnection())
 		biz := usersbiz.NewUpdateUserBiz(store)
 
-		if err := biz.UpdateUser(c.Request.Context(), user_id, &data); err != nil {
+		if err := biz.UpdateUser(c.Request.Context(), id, &data); err != nil {
 			c.JSON(401, gin.H{
 				"error": err.Error(),
 			})

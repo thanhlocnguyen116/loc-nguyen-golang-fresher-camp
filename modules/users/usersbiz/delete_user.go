@@ -15,7 +15,7 @@ type DeleteUserStore interface {
 
 	SoftDeleteData(
 		ctx context.Context,
-		user_id int,
+		id int,
 	) error
 }
 
@@ -27,8 +27,8 @@ func NewDeleteUserBiz(store DeleteUserStore) *deleteUserBiz {
 	return &deleteUserBiz{store: store}
 }
 
-func (biz *deleteUserBiz) DeleteUser(ctx context.Context, user_id int) error {
-	oldData, err := biz.store.FindDataByCondition(ctx, map[string]interface{}{"user_id": user_id})
+func (biz *deleteUserBiz) DeleteUser(ctx context.Context, id int) error {
+	oldData, err := biz.store.FindDataByCondition(ctx, map[string]interface{}{"id": id})
 
 	if err != nil {
 		return err
@@ -38,7 +38,7 @@ func (biz *deleteUserBiz) DeleteUser(ctx context.Context, user_id int) error {
 		return errors.New("data deleted")
 	}
 
-	if err := biz.store.SoftDeleteData(ctx, user_id); err != nil {
+	if err := biz.store.SoftDeleteData(ctx, id); err != nil {
 		return nil
 	}
 

@@ -13,7 +13,7 @@ import (
 
 func GetUser(appCtx component.AppContext) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		user_id, err := strconv.Atoi(c.Param("user_id"))
+		id, err := strconv.Atoi(c.Param("id"))
 
 		if err != nil {
 			c.JSON(http.StatusBadRequest, common.ErrInvalidRequest(err))
@@ -23,7 +23,7 @@ func GetUser(appCtx component.AppContext) gin.HandlerFunc {
 		store := userstorage.NewSQLStore(appCtx.GetMainDBConnection())
 		biz := usersbiz.NewGetUserBiz(store)
 
-		data, err := biz.GetUser(c.Request.Context(), user_id)
+		data, err := biz.GetUser(c.Request.Context(), id)
 
 		if err != nil {
 			panic(err)

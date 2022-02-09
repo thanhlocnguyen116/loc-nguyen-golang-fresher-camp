@@ -15,7 +15,7 @@ type UpdateUserStore interface {
 
 	UpdateData(
 		ctx context.Context,
-		user_id int,
+		id int,
 		data *usermodel.UserUpdate,
 	) error
 }
@@ -28,8 +28,8 @@ func NewUpdateUserBiz(store UpdateUserStore) *updateUserBiz {
 	return &updateUserBiz{store: store}
 }
 
-func (biz *updateUserBiz) UpdateUser(ctx context.Context, user_id int, data *usermodel.UserUpdate) error {
-	oldData, err := biz.store.FindDataByCondition(ctx, map[string]interface{}{"user_id": user_id})
+func (biz *updateUserBiz) UpdateUser(ctx context.Context, id int, data *usermodel.UserUpdate) error {
+	oldData, err := biz.store.FindDataByCondition(ctx, map[string]interface{}{"id": id})
 
 	if err != nil {
 		return err
@@ -39,7 +39,7 @@ func (biz *updateUserBiz) UpdateUser(ctx context.Context, user_id int, data *use
 		return errors.New("data deleted")
 	}
 
-	if err := biz.store.UpdateData(ctx, user_id, data); err != nil {
+	if err := biz.store.UpdateData(ctx, id, data); err != nil {
 		return nil
 	}
 
