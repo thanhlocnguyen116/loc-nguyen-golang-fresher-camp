@@ -6,6 +6,7 @@ import (
 	"locnguyen/middleware"
 	"locnguyen/modules/restaurants/transport/ginrestaurant"
 	"locnguyen/modules/upload/transport/ginupload"
+	"locnguyen/modules/user/transport/ginuser"
 	"log"
 	"os"
 
@@ -35,6 +36,7 @@ func main() {
 	s3APIKey := os.Getenv("S3APIKey")
 	s3SecretKey := os.Getenv("S3SecretKey")
 	s3Domain := os.Getenv("S3Domain")
+	secretKey := os.Getenv("SYSTEM_SECRET")
 
 	s3Provider := uploadprovider.NewS3Provider(s3BucketName, s3Region, s3APIKey, s3SecretKey, s3Domain)
 
@@ -45,15 +47,15 @@ func main() {
 	}
 
 	//run service
-	if err := runService(db, s3Provider); err != nil {
+	if err := runService(db, s3Provider, secretKey); err != nil {
 		log.Fatalln(err)
 	}
 
 }
 
-func runService(db *gorm.DB, upProvider uploadprovider.UploadProvider) error {
+func runService(db *gorm.DB, upProvider uploadprovider.UploadProvider, secretKey string) error {
 
-	appCtx := component.NewAppContext(db, upProvider)
+	appCtx := component.NewAppContext(db, upProvider, secretKey)
 	r := gin.Default()
 
 	//middleware
@@ -61,18 +63,15 @@ func runService(db *gorm.DB, upProvider uploadprovider.UploadProvider) error {
 
 	// CRUD
 
+	v := r.Group("/v")
+
 	//users
-	// users := r.Group("/users")
-	// {
-	// 	users.POST("", ginuser.CreateUser(appCtx))
-	// 	users.GET("/:id", ginuser.GetUser(appCtx))
-	// 	users.GET("", ginuser.ListUser(appCtx))
-	// 	users.PATCH("/:id", ginuser.UpdateUser(appCtx))
-	// 	users.DELETE("/:id", ginuser.DeleteUser(appCtx))
-	// }
+	v.POST("/register", ginuser.Register(appCtx))
+	v.POST("/login", ginuser.Login(appCtx))
+	v.GET("/profile", middleware.RequiredAuth(appCtx), ginuser.GetProfile(appCtx))
 
 	//upload images
-	r.POST("/upload", ginupload.Upload(appCtx))
+	v.POST("/upload", ginupload.Upload(appCtx))
 
 	//restaurants
 	restaurants := r.Group("/restaurants")
