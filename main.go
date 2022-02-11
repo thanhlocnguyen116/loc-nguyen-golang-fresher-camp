@@ -5,6 +5,7 @@ import (
 	"locnguyen/component/uploadprovider"
 	"locnguyen/middleware"
 	"locnguyen/modules/restaurants/transport/ginrestaurant"
+	"locnguyen/modules/upload/transport/ginupload"
 	"log"
 	"os"
 
@@ -69,6 +70,9 @@ func runService(db *gorm.DB, upProvider uploadprovider.UploadProvider) error {
 	// 	users.PATCH("/:id", ginuser.UpdateUser(appCtx))
 	// 	users.DELETE("/:id", ginuser.DeleteUser(appCtx))
 	// }
+
+	//upload images
+	r.POST("/upload", ginupload.Upload(appCtx))
 
 	//restaurants
 	restaurants := r.Group("/restaurants")
