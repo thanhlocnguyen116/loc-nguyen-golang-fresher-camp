@@ -4,7 +4,6 @@ import (
 	"context"
 	"locnguyen/common"
 	"locnguyen/modules/restaurants/model"
-	"locnguyen/modules/users/usermodel"
 )
 
 type GetRestaurantStore interface {
@@ -28,14 +27,14 @@ func (biz *getRestaurantBiz) GetRestaurant(ctx context.Context, id int) (*model.
 
 	if err != nil {
 		if err != common.RecordNotFound {
-			return nil, common.ErrCannotGetEntity(usermodel.EntityName, err)
+			return nil, common.ErrCannotGetEntity(model.EntityName, err)
 		}
 
-		return nil, common.ErrCannotGetEntity(usermodel.EntityName, err)
+		return nil, common.ErrCannotGetEntity(model.EntityName, err)
 	}
 
 	if data.Status == 0 {
-		return nil, common.ErrEntityDeleted(usermodel.EntityName, nil)
+		return nil, common.ErrEntityDeleted(model.EntityName, nil)
 	}
 
 	return data, err
