@@ -1,3 +1,4 @@
-# Khi nào cần tạo các cột số đếm ngay trên table dữ liệu (VD: liked_count trên restaurants)?
-- Khi cần đếm số lượng của dữ liệu nào đó ở db
-- Ở trường hợp liked_count số lượt like liên quan đến việc người dùng có thể unlike, việc đếm ở db sẽ làm cho db phải chịu tải, nên ta tạo 1 bảng riêng, module riêng rồi cout ở đó  
+# Trong trường hợp tạo cột đếm thì làm sao để update cột đó? 
+- Tại tầng storage ta dùng GORM( db.<Tên model>(&tên cột).Updates(map[string]interface{}{"tên cột": gorm.Expr("tên cột+ ?"1)}) ) để update giá trị cho cột
+# Làm sao để API chính không bị block vì phải update số đếm?
+- Bắt lỗi tại tầng transport, cho nó panic khi gặp lỗi, dùng middleware Recovery để tránh crash
