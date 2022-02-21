@@ -1,4 +1,3 @@
-# Nếu chúng ta có nhiều hơn 1 module, làm sao để giao tiếp với nhau.
-- khi có nhiều module, muốn các module liên kết ta store dữ liệu của 1 module trong tầng storage của module này sau đó thực gọi và lấy dữ liệu trong business của 1 module khác 
-# Giả sử module "Restaurant" cần data số lượt like từ module "Like Restaurant" thì sẽ truy xuất như thế nào?
-- Khi cần lấy lượt like từ module Restaurantlike sang module Restaurant ta store dữ liệu ở tầng storage ở đây là dùng cout để tính số lần nhà hàng được like, sau đó bên business của Restaurant ta gọi lại store này lấy dữ liệu
+# Khi nào cần tạo các cột số đếm ngay trên table dữ liệu (VD: liked_count trên restaurants)?
+- Khi cần đếm số lượng của dữ liệu nào đó ở db
+- Ở trường hợp liked_count số lượt like liên quan đến việc người dùng có thể unlike, việc đếm ở db sẽ làm cho db phải chịu tải, nên ta tạo 1 bảng riêng, module riêng rồi cout ở đó  
